@@ -2,16 +2,21 @@ package models
 
 import "time"
 
+type TransactionID int64
+type UserID int64
+
+// Transaction — основная сущность транзакции
 type Transaction struct {
-    ID          int64
-    CreatorID   int64
-    Amount      int64 // в рублях
-    Description string
-    CreatedAt   time.Time
-    Participants []TransactionParticipant
+    ID           TransactionID                      // Уникальный идентификатор транзакции
+    CreatorID    UserID                      // ID пользователя, создавшего транзакцию
+    Amount       int64                      // Сумма транзакции (например, в копейках)
+    Description  string                     // Описание (например, "Ужин в кафе")
+    CreatedAt    time.Time                  // Время создания
+    Participants []TransactionParticipant   // Список участников
 }
 
+// TransactionParticipant — участник транзакции
 type TransactionParticipant struct {
-    UserID int64
-    Amount int64 // сколько должен этот участник
+    UserID UserID // ID пользователя-участника
+    Amount int64 // Сколько должен этот участник (или переплатил)
 }
