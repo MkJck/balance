@@ -5,6 +5,8 @@ import (
     "github.com/MkJck/balance/internal/handlers"
     "github.com/MkJck/balance/internal/services"
     "github.com/MkJck/balance/internal/repository"
+    "github.com/gin-contrib/cors"
+    "time"
     // "github.com/joho/godotenv"
     // "os"
     // Здесь можно добавить импорт реальной реализации репозитория, например, для PostgreSQL
@@ -17,6 +19,8 @@ func main() {
     //     log.Fatal("Error loading .env file")
     // }
     // dbHost := os.Getenv("DB_HOST")
+
+    
 
     // 1. Создаём репозиторий (пока можно использовать заглушку или in-memory)
     var txRepo repository.TransactionRepository
@@ -31,6 +35,15 @@ func main() {
 
     // 4. Создаём роутер Gin
     r := gin.Default()
+
+    // Настройка CORS
+    r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:5173"}, // URL твоего фронтенда
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+        AllowCredentials: true,
+        MaxAge:           12 * time.Hour,
+    }))
 
     // 5. Регистрируем маршруты
     r.POST("/transactions", txHandler.CreateTransaction)
